@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-
+import plotly.express as px
 # =====================================================
 # PAGE CONFIG
 # =====================================================
@@ -232,3 +232,59 @@ st.dataframe(
 st.caption(
     f"Showing {len(filtered_df)} records"
 )
+#-------------
+# CHART1
+
+hours_df = (
+    filtered_df.groupby("University")["Delivery hrs"]
+    .sum()
+    .reset_index()
+)
+
+fig1 = px.bar(
+    hours_df,
+    x="University",
+    y="Delivery hrs",
+    title="Training Hours by University",
+    color_discrete_sequence=["#7C3AED"]
+)
+
+st.plotly_chart(fig1, use_container_width=True)
+
+#====
+#CHART2
+
+trainer_df = (
+    filtered_df.groupby("Mapped Trainers")["Delivery hrs"]
+    .sum()
+    .reset_index()
+)
+
+fig2 = px.bar(
+    trainer_df,
+    x="Mapped Trainers",
+    y="Delivery hrs",
+    title="Trainer Workload",
+    color_discrete_sequence=["#4C1D95"]
+)
+
+st.plotly_chart(fig2, use_container_width=True)
+
+#=====CHART3
+
+student_df = (
+    filtered_df.groupby("University")["No of students"]
+    .sum()
+    .reset_index()
+)
+
+fig3 = px.pie(
+    student_df,
+    names="University",
+    values="No of students",
+    title="Student Distribution"
+)
+
+st.plotly_chart(fig3, use_container_width=True)
+
+
