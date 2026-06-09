@@ -259,7 +259,7 @@ fig1.update_layout(
     title_font_size=18
 )
 
-st.plotly_chart(fig1, use_container_width=True)
+
 
 #====
 #CHART2
@@ -285,7 +285,15 @@ fig2.update_layout(
     title_font_size=18
 )
 
-st.plotly_chart(fig2, use_container_width=True)
+###====SHOW SIDE BY SIDE
+
+col1, col2 = st.columns(2)
+
+with col1:
+    st.plotly_chart(fig1, use_container_width=True)
+
+with col2:
+    st.plotly_chart(fig2, use_container_width=True)
 
 #=====CHART3
 
