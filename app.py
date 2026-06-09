@@ -48,7 +48,10 @@ h1,h2,h3{
 # TITLE
 # =====================================================
 
-st.title("📚 Training Resource Management Dashboard")
+st.markdown("""
+### 📚University Training Planning Dashboard
+Monitor trainer allocation, delivery hours, student coverage and program execution.
+""")
 
 # =====================================================
 # FILE UPLOADER
@@ -250,6 +253,12 @@ fig1 = px.bar(
 )
 
 st.plotly_chart(fig1, use_container_width=True)
+fig.update_layout(
+    paper_bgcolor="white",
+    plot_bgcolor="white",
+    font=dict(color="#374151"),
+    title_font_size=18
+)
 
 #====
 #CHART2
@@ -270,6 +279,13 @@ fig2 = px.bar(
 
 st.plotly_chart(fig2, use_container_width=True)
 
+fig.update_layout(
+    paper_bgcolor="white",
+    plot_bgcolor="white",
+    font=dict(color="#374151"),
+    title_font_size=18
+)
+
 #=====CHART3
 
 student_df = (
@@ -287,4 +303,24 @@ fig3 = px.pie(
 
 st.plotly_chart(fig3, use_container_width=True)
 
+fig.update_layout(
+    paper_bgcolor="white",
+    plot_bgcolor="white",
+    font=dict(color="#374151"),
+    title_font_size=18
+)
+#======
+total_programs = filtered_df["Program"].nunique()
+total_trainers = filtered_df["Mapped Trainers"].nunique()
 
+#=== university table
+summary_df = (
+    filtered_df
+    .groupby("University")
+    .agg({
+        "Program":"nunique",
+        "No of students":"sum",
+        "Delivery hrs":"sum"
+    })
+    .reset_index()
+)
