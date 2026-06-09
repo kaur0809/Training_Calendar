@@ -6,7 +6,7 @@ import pandas as pd
 # =====================================================
 
 st.set_page_config(
-    page_title="Training Resource Dashboard",
+    page_title="Training Calendar",
     page_icon="📚",
     layout="wide"
 )
