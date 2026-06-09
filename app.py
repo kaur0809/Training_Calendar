@@ -305,9 +305,9 @@ st.plotly_chart(fig3, use_container_width=True)
 
 # =====================================================
 
-events = []
-
-for _, row in filtered_df.iterrows():
+# =====================================================
+# CALENDAR EVENTS
+# =====================================================
 
 events = []
 
@@ -327,19 +327,16 @@ for _, row in filtered_df.iterrows():
 
 # =====================================================
 
-st.subheader("Training Timeline")
-
 calendar_options = {
-"initialView": "dayGridMonth",
-"height": 700
+    "initialView": "dayGridMonth",
+    "height": 700
 }
 
 calendar(
-events=events,
-options=calendar_options,
-key="timeline"
+    events=events,
+    options=calendar_options,
+    key="timeline"
 )
-
 # =====================================================
 
 # UNIVERSITY SUMMARY
