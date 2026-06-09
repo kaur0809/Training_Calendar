@@ -341,27 +341,16 @@ calendar(
     key="timeline"
 )
 
-#=== university table
-summary_df = (
-    filtered_df
-    .groupby("University")
-    .agg({
-        "Program":"nunique",
-        "No of students":"sum",
-        "Delivery hrs":"sum"
-    })
-    .reset_index()
-
-    #=== SUMMARY TABLE
-    st.subheader("University Summary")
+## SUMMARY TABLE
+st.subheader("University Summary")
 
 summary_df = (
     filtered_df
     .groupby("University")
     .agg({
-        "Program":"nunique",
-        "No of students":"sum",
-        "Delivery hrs":"sum"
+        "Program": "nunique",
+        "No of students": "sum",
+        "Delivery hrs": "sum"
     })
     .reset_index()
 )
@@ -377,7 +366,6 @@ st.dataframe(
     summary_df,
     use_container_width=True
 )
-
 
 ### CREATE EVENTS 
 events = []
