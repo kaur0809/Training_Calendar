@@ -309,15 +309,17 @@ events = []
 
 for _, row in filtered_df.iterrows():
 
-```
-events.append({
-    "title": f"{row['University']} | {row['Program']}",
-    "start": "2025-05-01",
-    "end": "2025-05-31",
-    "backgroundColor": "#7C3AED",
-    "borderColor": "#4C1D95"
-})
-```
+events = []
+
+for _, row in filtered_df.iterrows():
+
+    events.append({
+        "title": f"{row['University']} | {row['Program']}",
+        "start": "2025-05-01",
+        "end": "2025-05-31",
+        "backgroundColor": "#7C3AED",
+        "borderColor": "#4C1D95"
+    })
 
 # =====================================================
 
@@ -378,10 +380,10 @@ use_container_width=True
 csv = filtered_df.to_csv(index=False).encode("utf-8")
 
 st.download_button(
-label="📥 Download Filtered Data",
-data=csv,
-file_name="training_data.csv",
-mime="text/csv"
+  label="📥 Download Filtered Data",
+   data=csv,
+  file_name="training_data.csv",
+  mime="text/csv"
 )
 
 # =====================================================
@@ -393,9 +395,9 @@ mime="text/csv"
 st.subheader("Detailed Training Dataset")
 
 st.dataframe(
-filtered_df,
-use_container_width=True,
-height=600
+  filtered_df,
+   use_container_width=True,
+   height=600
 )
 
 st.caption(
