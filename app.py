@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+from streamlit_calendar import calendar
 # =====================================================
 # PAGE CONFIG
 # =====================================================
@@ -323,6 +324,23 @@ st.plotly_chart(fig3, use_container_width=True)
 total_programs = filtered_df["Program"].nunique()
 total_trainers = filtered_df["Mapped Trainers"].nunique()
 
+
+#CALENDAR
+
+
+st.subheader("Training Timeline")
+
+calendar_options = {
+    "initialView": "dayGridMonth",
+    "height": 700
+}
+
+calendar(
+    events=events,
+    options=calendar_options,
+    key="timeline"
+)
+
 #=== university table
 summary_df = (
     filtered_df
@@ -333,4 +351,47 @@ summary_df = (
         "Delivery hrs":"sum"
     })
     .reset_index()
+
+    #=== SUMMARY TABLE
+    st.subheader("University Summary")
+
+summary_df = (
+    filtered_df
+    .groupby("University")
+    .agg({
+        "Program":"nunique",
+        "No of students":"sum",
+        "Delivery hrs":"sum"
+    })
+    .reset_index()
 )
+
+summary_df.columns = [
+    "University",
+    "Programs",
+    "Students",
+    "Training Hours"
+]
+
+st.dataframe(
+    summary_df,
+    use_container_width=True
+)
+
+
+### CREATE EVENTS 
+events = []
+
+for _, row in filtered_df.iterrows():
+
+    start = pd.to_datetime(row["Start date"])
+    end = pd.to_datetime(row["Closing date"])
+
+    events.append({
+        "title": f"{row['University']} | {row['Program']}",
+        "start": start.strftime("%Y-%m-%d"),
+        "end": end.strftime("%Y-%m-%d"),
+        "backgroundColor": "#7C3AED",
+        "borderColor": "#4C1D95"
+    })
+
