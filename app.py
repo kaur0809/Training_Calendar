@@ -77,6 +77,11 @@ if uploaded_file.name.endswith(".csv"):
 else:
     df = pd.read_excel(uploaded_file)
 
+# Debug columns
+st.write("Columns in uploaded file:")
+st.write(df.columns.tolist())
+
+
 # =====================================================
 # DATE CONVERSION
 # =====================================================
