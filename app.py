@@ -12,18 +12,16 @@ st.set_page_config(
 )
 
 # =====================================================
-# THEME
+# PURPLE THEME
 # =====================================================
 
 st.markdown("""
 <style>
 
-/* App Background */
 .stApp{
     background-color:#F8F9FC;
 }
 
-/* Sidebar */
 [data-testid="stSidebar"]{
     background-color:#4C1D95;
 }
@@ -32,18 +30,15 @@ st.markdown("""
     color:white;
 }
 
-/* Headers */
 h1,h2,h3{
     color:#374151;
 }
 
-/* KPI Cards */
 [data-testid="stMetric"]{
     background:white;
     border-radius:12px;
     padding:15px;
     border-left:5px solid #7C3AED;
-    box-shadow:0px 2px 6px rgba(0,0,0,0.05);
 }
 
 </style>
@@ -65,29 +60,72 @@ uploaded_file = st.sidebar.file_uploader(
 )
 
 if uploaded_file is None:
-    st.warning("Please upload your training dataset.")
+    st.info("Upload your Excel file to begin.")
     st.stop()
 
 # =====================================================
 # LOAD DATA
 # =====================================================
 
-if uploaded_file.name.endswith(".csv"):
-    df = pd.read_csv(uploaded_file)
-else:
-    df = pd.read_excel(uploaded_file)
+try:
 
-# Debug columns
-st.write("Columns in uploaded file:")
-st.write(df.columns.tolist())
+    if uploaded_file.name.endswith(".csv"):
+        df = pd.read_csv(uploaded_file)
 
+    else:
+        # Load first sheet
+        df = pd.read_excel(uploaded_file)
+
+    # Clean column names
+    df.columns = (
+        df.columns.astype(str)
+        .str.strip()
+        .str.replace("\n", " ", regex=False)
+        .str.replace("  ", " ", regex=False)
+    )
+
+except Exception as e:
+    st.error(f"Error reading file: {e}")
+    st.stop()
 
 # =====================================================
-# DATE CONVERSION
+# DEBUG SECTION
 # =====================================================
 
-df["Start date"] = pd.to_datetime(df["Start date"])
-df["Closing date"] = pd.to_datetime(df["Closing date"])
+with st.expander("🔍 Debug Columns"):
+
+    st.write("Columns detected in Excel:")
+    st.write(df.columns.tolist())
+
+# =====================================================
+# REQUIRED COLUMNS
+# =====================================================
+
+required_cols = [
+    "University",
+    "Program",
+    "Semester",
+    "Batch details",
+    "Mapped Trainers",
+    "Delivery hrs",
+    "No of students"
+]
+
+missing_cols = [
+    col for col in required_cols
+    if col not in df.columns
+]
+
+if missing_cols:
+
+    st.error(
+        f"Missing columns: {missing_cols}"
+    )
+
+    st.write("Detected Columns:")
+    st.write(df.columns.tolist())
+
+    st.stop()
 
 # =====================================================
 # SIDEBAR FILTERS
@@ -126,8 +164,24 @@ filtered_df = df[
 ]
 
 # =====================================================
+# SAFE NUMERIC CONVERSION
+# =====================================================
+
+filtered_df["Delivery hrs"] = pd.to_numeric(
+    filtered_df["Delivery hrs"],
+    errors="coerce"
+)
+
+filtered_df["No of students"] = pd.to_numeric(
+    filtered_df["No of students"],
+    errors="coerce"
+)
+
+# =====================================================
 # KPI SECTION
 # =====================================================
+
+st.subheader("Training Overview")
 
 total_universities = filtered_df["University"].nunique()
 
@@ -139,54 +193,36 @@ total_hours = filtered_df["Delivery hrs"].sum()
 
 c1, c2, c3, c4 = st.columns(4)
 
-with c1:
-    st.metric(
-        "Universities",
-        total_universities
-    )
+c1.metric(
+    "Universities",
+    total_universities
+)
 
-with c2:
-    st.metric(
-        "Batches",
-        total_batches
-    )
+c2.metric(
+    "Batches",
+    total_batches
+)
 
-with c3:
-    st.metric(
-        "Students",
-        int(total_students)
-    )
+c3.metric(
+    "Students",
+    int(total_students)
+)
 
-with c4:
-    st.metric(
-        "Training Hours",
-        round(total_hours, 1)
-    )
+c4.metric(
+    "Training Hours",
+    round(total_hours, 1)
+)
 
 # =====================================================
-# DATA SUMMARY
+# DATA TABLE
 # =====================================================
 
-st.subheader("Dataset Summary")
-
-summary_cols = [
-    "University",
-    "Program",
-    "Semester",
-    "Batch details",
-    "Mapped Trainers",
-    "Delivery hrs",
-    "No of students",
-    "Start date",
-    "Closing date"
-]
-
-available_cols = [c for c in summary_cols if c in filtered_df.columns]
+st.subheader("Training Dataset")
 
 st.dataframe(
-    filtered_df[available_cols],
+    filtered_df,
     use_container_width=True,
-    height=500
+    height=600
 )
 
 # =====================================================
