@@ -182,204 +182,223 @@ filtered_df["No of students"] = pd.to_numeric(
 )
 
 # =====================================================
+
 # KPI SECTION
+
 # =====================================================
 
 st.subheader("Training Overview")
 
 total_universities = filtered_df["University"].nunique()
-
-total_batches = filtered_df["No. of batches"].sum()
-
+total_programs = filtered_df["Program"].nunique()
+total_trainers = filtered_df["Mapped Trainers"].nunique()
 total_students = filtered_df["No of students"].sum()
-
 total_hours = filtered_df["Delivery hrs"].sum()
 
-c1, c2, c3, c4 = st.columns(4)
+c1, c2, c3, c4, c5 = st.columns(5)
 
-c1.metric(
-    "Universities",
-    total_universities
-)
-
-c2.metric(
-    "Batches",
-    total_batches
-)
-
-c3.metric(
-    "Students",
-    int(total_students)
-)
-
-c4.metric(
-    "Training Hours",
-    round(total_hours, 1)
-)
+c1.metric("Universities", total_universities)
+c2.metric("Programs", total_programs)
+c3.metric("Trainers", total_trainers)
+c4.metric("Students", int(total_students))
+c5.metric("Training Hours", round(total_hours, 1))
 
 # =====================================================
-# DATA TABLE
-# =====================================================
 
-st.subheader("Training Dataset")
-
-st.dataframe(
-    filtered_df,
-    use_container_width=True,
-    height=600
-)
+# CHART 1 - UNIVERSITY HOURS
 
 # =====================================================
-# FOOTER
-# =====================================================
-
-st.caption(
-    f"Showing {len(filtered_df)} records"
-)
-#-------------
-# CHART1
 
 hours_df = (
-    filtered_df.groupby("University")["Delivery hrs"]
-    .sum()
-    .reset_index()
+filtered_df.groupby("University")["Delivery hrs"]
+.sum()
+.reset_index()
 )
 
 fig1 = px.bar(
-    hours_df,
-    x="University",
-    y="Delivery hrs",
-    title="Training Hours by University",
-    color_discrete_sequence=["#7C3AED"]
+hours_df,
+x="University",
+y="Delivery hrs",
+title="Training Hours by University",
+color_discrete_sequence=["#7C3AED"]
 )
 
 fig1.update_layout(
-    paper_bgcolor="white",
-    plot_bgcolor="white",
-    font=dict(color="#374151"),
-    title_font_size=18
+paper_bgcolor="white",
+plot_bgcolor="white",
+font=dict(color="#374151"),
+title_font_size=18,
+xaxis_tickangle=-30
 )
 
+# =====================================================
 
+# CHART 2 - TRAINER WORKLOAD
 
-#====
-#CHART2
+# =====================================================
 
 trainer_df = (
-    filtered_df.groupby("Mapped Trainers")["Delivery hrs"]
-    .sum()
-    .reset_index()
+filtered_df.groupby("Mapped Trainers")["Delivery hrs"]
+.sum()
+.reset_index()
 )
 
 fig2 = px.bar(
-    trainer_df,
-    x="Mapped Trainers",
-    y="Delivery hrs",
-    title="Trainer Workload",
-    color_discrete_sequence=["#4C1D95"]
+trainer_df,
+x="Mapped Trainers",
+y="Delivery hrs",
+title="Trainer Workload",
+color_discrete_sequence=["#4C1D95"]
 )
 
 fig2.update_layout(
-    paper_bgcolor="white",
-    plot_bgcolor="white",
-    font=dict(color="#374151"),
-    title_font_size=18
+paper_bgcolor="white",
+plot_bgcolor="white",
+font=dict(color="#374151"),
+title_font_size=18
 )
 
-###====SHOW SIDE BY SIDE
+# =====================================================
+
+# DISPLAY CHARTS SIDE BY SIDE
+
+# =====================================================
 
 col1, col2 = st.columns(2)
 
 with col1:
-    st.plotly_chart(fig1, use_container_width=True)
+st.plotly_chart(fig1, use_container_width=True)
 
 with col2:
-    st.plotly_chart(fig2, use_container_width=True)
+st.plotly_chart(fig2, use_container_width=True)
 
-#=====CHART3
+# =====================================================
+
+# CHART 3 - STUDENT DISTRIBUTION
+
+# =====================================================
 
 student_df = (
-    filtered_df.groupby("University")["No of students"]
-    .sum()
-    .reset_index()
+filtered_df.groupby("University")["No of students"]
+.sum()
+.reset_index()
 )
 
 fig3 = px.pie(
-    student_df,
-    names="University",
-    values="No of students",
-    title="Student Distribution"
+student_df,
+names="University",
+values="No of students",
+title="Student Distribution"
 )
 
 fig3.update_layout(
-    paper_bgcolor="white",
-    plot_bgcolor="white",
-    font=dict(color="#374151"),
-    title_font_size=18
+paper_bgcolor="white",
+plot_bgcolor="white",
+font=dict(color="#374151"),
+title_font_size=18
 )
 
 st.plotly_chart(fig3, use_container_width=True)
 
-#======
-total_programs = filtered_df["Program"].nunique()
-total_trainers = filtered_df["Mapped Trainers"].nunique()
+# =====================================================
 
+# CALENDAR EVENTS
 
-#CALENDAR
+# =====================================================
 
-
-st.subheader("Training Timeline")
-
-calendar_options = {
-    "initialView": "dayGridMonth",
-    "height": 700
-}
-
-calendar(
-    events=events,
-    options=calendar_options,
-    key="timeline"
-)
-
-## SUMMARY TABLE
-st.subheader("University Summary")
-
-summary_df = (
-    filtered_df
-    .groupby("University")
-    .agg({
-        "Program": "nunique",
-        "No of students": "sum",
-        "Delivery hrs": "sum"
-    })
-    .reset_index()
-)
-
-summary_df.columns = [
-    "University",
-    "Programs",
-    "Students",
-    "Training Hours"
-]
-
-st.dataframe(
-    summary_df,
-    use_container_width=True
-)
-
-### CREATE EVENTS 
 events = []
 
 for _, row in filtered_df.iterrows():
 
-    start = pd.to_datetime(row["Start date"])
-    end = pd.to_datetime(row["Closing date"])
+```
+events.append({
+    "title": f"{row['University']} | {row['Program']}",
+    "start": "2025-05-01",
+    "end": "2025-05-31",
+    "backgroundColor": "#7C3AED",
+    "borderColor": "#4C1D95"
+})
+```
 
-    events.append({
-        "title": f"{row['University']} | {row['Program']}",
-        "start": start.strftime("%Y-%m-%d"),
-        "end": end.strftime("%Y-%m-%d"),
-        "backgroundColor": "#7C3AED",
-        "borderColor": "#4C1D95"
-    })
+# =====================================================
 
+# TRAINING TIMELINE
+
+# =====================================================
+
+st.subheader("Training Timeline")
+
+calendar_options = {
+"initialView": "dayGridMonth",
+"height": 700
+}
+
+calendar(
+events=events,
+options=calendar_options,
+key="timeline"
+)
+
+# =====================================================
+
+# UNIVERSITY SUMMARY
+
+# =====================================================
+
+st.subheader("University Summary")
+
+summary_df = (
+filtered_df
+.groupby("University")
+.agg({
+"Program": "nunique",
+"No of students": "sum",
+"Delivery hrs": "sum"
+})
+.reset_index()
+)
+
+summary_df.columns = [
+"University",
+"Programs",
+"Students",
+"Training Hours"
+]
+
+st.dataframe(
+summary_df,
+use_container_width=True
+)
+
+# =====================================================
+
+# DOWNLOAD BUTTON
+
+# =====================================================
+
+csv = filtered_df.to_csv(index=False).encode("utf-8")
+
+st.download_button(
+label="📥 Download Filtered Data",
+data=csv,
+file_name="training_data.csv",
+mime="text/csv"
+)
+
+# =====================================================
+
+# DETAILED DATASET
+
+# =====================================================
+
+st.subheader("Detailed Training Dataset")
+
+st.dataframe(
+filtered_df,
+use_container_width=True,
+height=600
+)
+
+st.caption(
+f"Showing {len(filtered_df)} records"
+)
