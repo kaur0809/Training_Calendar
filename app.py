@@ -185,7 +185,7 @@ st.subheader("Training Overview")
 
 total_universities = filtered_df["University"].nunique()
 
-total_batches = filtered_df["Batch details"].nunique()
+total_batches = filtered_df["No. of batches"].sum()
 
 total_students = filtered_df["No of students"].sum()
 
