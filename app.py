@@ -251,14 +251,14 @@ fig1 = px.bar(
     title="Training Hours by University",
     color_discrete_sequence=["#7C3AED"]
 )
-
-st.plotly_chart(fig1, use_container_width=True)
 fig.update_layout(
     paper_bgcolor="white",
     plot_bgcolor="white",
     font=dict(color="#374151"),
     title_font_size=18
 )
+
+st.plotly_chart(fig1, use_container_width=True)
 
 #====
 #CHART2
@@ -277,14 +277,15 @@ fig2 = px.bar(
     color_discrete_sequence=["#4C1D95"]
 )
 
-st.plotly_chart(fig2, use_container_width=True)
-
 fig.update_layout(
     paper_bgcolor="white",
     plot_bgcolor="white",
     font=dict(color="#374151"),
     title_font_size=18
 )
+st.plotly_chart(fig2, use_container_width=True)
+
+
 
 #=====CHART3
 
@@ -301,14 +302,15 @@ fig3 = px.pie(
     title="Student Distribution"
 )
 
-st.plotly_chart(fig3, use_container_width=True)
-
 fig.update_layout(
     paper_bgcolor="white",
     plot_bgcolor="white",
     font=dict(color="#374151"),
     title_font_size=18
 )
+st.plotly_chart(fig3, use_container_width=True)
+
+
 #======
 total_programs = filtered_df["Program"].nunique()
 total_trainers = filtered_df["Mapped Trainers"].nunique()
