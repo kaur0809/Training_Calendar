@@ -267,11 +267,10 @@ title_font_size=18
 col1, col2 = st.columns(2)
 
 with col1:
-st.plotly_chart(fig1, use_container_width=True)
+    st.plotly_chart(fig1, use_container_width=True)
 
 with col2:
-st.plotly_chart(fig2, use_container_width=True)
-
+    st.plotly_chart(fig2, use_container_width=True)
 # =====================================================
 
 # CHART 3 - STUDENT DISTRIBUTION
