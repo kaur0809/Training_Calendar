@@ -299,11 +299,6 @@ title_font_size=18
 
 st.plotly_chart(fig3, use_container_width=True)
 
-# =====================================================
-
-# CALENDAR EVENTS
-
-# =====================================================
 
 # =====================================================
 # CALENDAR EVENTS
@@ -366,6 +361,65 @@ summary_df.columns = [
 st.dataframe(
 summary_df,
 use_container_width=True
+)
+ #======== 
+# TRAINER ALLOCATION MATRIX
+
+st.subheader("👨‍🏫 Trainer Allocation Matrix")
+
+allocation_df = filtered_df[
+    [
+        "Mapped Trainers",
+        "University",
+        "Program",
+        "Batch details",
+        "Delivery hrs"
+    ]
+]
+
+st.dataframe(
+    allocation_df,
+    use_container_width=True,
+    height=400
+)
+
+#========== TRAINER UTILIZATION
+
+st.subheader("📊 Trainer Utilization")
+
+trainer_util = (
+    filtered_df
+    .groupby("Mapped Trainers")["Delivery hrs"]
+    .sum()
+    .reset_index()
+    .sort_values(
+        "Delivery hrs",
+        ascending=False
+    )
+)
+
+st.dataframe(
+    trainer_util,
+    use_container_width=True
+)
+
+
+#=========Workload
+
+
+MAX_HOURS = 80
+
+trainer_util["Status"] = trainer_util["Delivery hrs"].apply(
+    lambda x: "🔴 Overloaded"
+    if x > MAX_HOURS
+    else "🟢 Available"
+)
+
+st.subheader("⚠ Trainer Capacity Status")
+
+st.dataframe(
+    trainer_util,
+    use_container_width=True
 )
 
 # =====================================================
