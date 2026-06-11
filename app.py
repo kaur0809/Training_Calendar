@@ -304,17 +304,7 @@ st.plotly_chart(fig3, use_container_width=True)
 # CALENDAR EVENTS
 # =====================================================
 
-from datetime import datetime, timedelta
-
-day_map = {
-    "MONDAY": 0,
-    "TUESDAY": 1,
-    "WEDNESDAY": 2,
-    "THURSDAY": 3,
-    "FRIDAY": 4,
-    "SATURDAY": 5,
-    "SUNDAY": 6
-}
+from datetime import timedelta
 
 events = []
 
@@ -324,19 +314,37 @@ for _, row in filtered_df.iterrows():
     end_date = pd.to_datetime(row["Closing date"])
 
     class_day = str(row["CLASS DAYS"]).upper()
+    class_time = str(row["CLASS TIME"])
 
-    if class_day not in day_map:
-        continue
+    # ONLINE = GREEN
+    if str(row["Delivery mode"]).upper() == "ONLINE":
 
-    target_day = day_map[class_day]
+        bg_color = "#22C55E"
+        border_color = "#16A34A"
+
+    # OFFLINE = BLUE
+    else:
+
+        bg_color = "#3B82F6"
+        border_color = "#2563EB"
+
+    day_map = {
+        "MONDAY": 0,
+        "TUESDAY": 1,
+        "WEDNESDAY": 2,
+        "THURSDAY": 3,
+        "FRIDAY": 4,
+        "SATURDAY": 5,
+        "SUNDAY": 6
+    }
+
+    target_day = day_map.get(class_day)
 
     current = start_date
 
     while current <= end_date:
 
         if current.weekday() == target_day:
-
-            class_time = str(row["CLASS TIME"])
 
             start_dt = pd.to_datetime(
                 f"{current.date()} {class_time}"
@@ -348,12 +356,20 @@ for _, row in filtered_df.iterrows():
                 "title": f"{row['Program']} | {row['Mapped Trainers']}",
                 "start": start_dt.isoformat(),
                 "end": end_dt.isoformat(),
-                "backgroundColor": "#7C3AED",
-                "borderColor": "#4C1D95"
+
+                "backgroundColor": bg_color,
+                "borderColor": border_color,
+                "textColor": "white"
             })
 
         current += timedelta(days=1)
 
+#========= Online/offline marker
+
+st.markdown("""
+🟢 **Online Classes** &nbsp;&nbsp;&nbsp;
+🔵 **Offline Classes**
+""")
 # =====================================================
 
 # TRAINING TIMELINE
@@ -361,13 +377,16 @@ for _, row in filtered_df.iterrows():
 # =====================================================
 
 calendar_options = {
-    "initialView": "timeGridWeek",
-    "height": 700,
+    "initialView": "dayGridMonth",
+    "height": 850,
+
     "headerToolbar": {
         "left": "prev,next today",
         "center": "title",
         "right": "dayGridMonth,timeGridWeek,timeGridDay"
-    }
+    },
+
+    "eventDisplay": "block"
 }
 
 calendar_state = calendar(
@@ -375,6 +394,14 @@ calendar_state = calendar(
     options=calendar_options,
     key="timeline"
 )
+
+if calendar_state.get("eventClick"):
+
+    selected = calendar_state["eventClick"]["event"]
+
+    st.success("📚 Class Details")
+
+    st.write(selected)
 
 if calendar_state.get("eventClick"):
     st.success("Class Details")
