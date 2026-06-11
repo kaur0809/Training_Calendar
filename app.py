@@ -304,17 +304,55 @@ st.plotly_chart(fig3, use_container_width=True)
 # CALENDAR EVENTS
 # =====================================================
 
+from datetime import datetime, timedelta
+
+day_map = {
+    "MONDAY": 0,
+    "TUESDAY": 1,
+    "WEDNESDAY": 2,
+    "THURSDAY": 3,
+    "FRIDAY": 4,
+    "SATURDAY": 5,
+    "SUNDAY": 6
+}
+
 events = []
 
 for _, row in filtered_df.iterrows():
 
-    events.append({
-        "title": f"{row['University']} | {row['Program']}",
-        "start": "2025-05-01",
-        "end": "2025-05-31",
-        "backgroundColor": "#7C3AED",
-        "borderColor": "#4C1D95"
-    })
+    start_date = pd.to_datetime(row["Start date"])
+    end_date = pd.to_datetime(row["Closing date"])
+
+    class_day = str(row["CLASS DAYS"]).upper()
+
+    if class_day not in day_map:
+        continue
+
+    target_day = day_map[class_day]
+
+    current = start_date
+
+    while current <= end_date:
+
+        if current.weekday() == target_day:
+
+            class_time = str(row["CLASS TIME"])
+
+            start_dt = pd.to_datetime(
+                f"{current.date()} {class_time}"
+            )
+
+            end_dt = start_dt + timedelta(hours=2)
+
+            events.append({
+                "title": f"{row['Program']} | {row['Mapped Trainers']}",
+                "start": start_dt.isoformat(),
+                "end": end_dt.isoformat(),
+                "backgroundColor": "#7C3AED",
+                "borderColor": "#4C1D95"
+            })
+
+        current += timedelta(days=1)
 
 # =====================================================
 
@@ -323,15 +361,24 @@ for _, row in filtered_df.iterrows():
 # =====================================================
 
 calendar_options = {
-    "initialView": "dayGridMonth",
-    "height": 700
+    "initialView": "timeGridWeek",
+    "height": 700,
+    "headerToolbar": {
+        "left": "prev,next today",
+        "center": "title",
+        "right": "dayGridMonth,timeGridWeek,timeGridDay"
+    }
 }
 
-calendar(
+calendar_state = calendar(
     events=events,
     options=calendar_options,
     key="timeline"
 )
+
+if calendar_state.get("eventClick"):
+    st.success("Class Details")
+    st.write(calendar_state["eventClick"])
 # =====================================================
 
 # UNIVERSITY SUMMARY
