@@ -208,60 +208,55 @@ c5.metric("Training Hours", round(total_hours, 1))
 # CHART 1 - UNIVERSITY HOURS
 
 # =====================================================
+# CHART 1 - TRAINING HOURS BY UNIVERSITY
+# =====================================================
 
 hours_df = (
-filtered_df.groupby("University")["Delivery hrs"]
-.sum()
-.reset_index()
+    filtered_df.groupby("University")["Delivery hrs"]
+    .sum()
+    .reset_index()
 )
 
 fig1 = px.bar(
-hours_df,
-x="University",
-y="Delivery hrs",
-title="Training Hours by University",
-color_discrete_sequence=["#7C3AED"]
+    hours_df,
+    x="University",
+    y="Delivery hrs",
+    title="Training Hours by University",
+    color_discrete_sequence=["#7C3AED"]
 )
 
 fig1.update_layout(
-paper_bgcolor="white",
-plot_bgcolor="white",
-font=dict(color="#374151"),
-title_font_size=18,
-xaxis_tickangle=-30
+    paper_bgcolor="white",
+    plot_bgcolor="white",
+    font=dict(color="#374151"),
+    title_font_size=18
 )
-
 # =====================================================
-
 # CHART 2 - TRAINER WORKLOAD
-
 # =====================================================
 
 trainer_df = (
-  filtered_df.groupby("Mapped Trainers")["Delivery hrs"]
-.sum()
-.reset_index()
+    filtered_df.groupby("Mapped Trainers")["Delivery hrs"]
+    .sum()
+    .reset_index()
 )
 
 fig2 = px.bar(
-  trainer_df,
-  x="Mapped Trainers",
-  y="Delivery hrs",
-  title="Trainer Workload",
-  color_discrete_sequence=["#4C1D95"]
+    trainer_df,
+    x="Mapped Trainers",
+    y="Delivery hrs",
+    title="Trainer Workload",
+    color_discrete_sequence=["#4C1D95"]
 )
 
 fig2.update_layout(
-      paper_bgcolor="white",
-       plot_bgcolor="white",
-       font=dict(color="#374151"),
-        title_font_size=18
+    paper_bgcolor="white",
+    plot_bgcolor="white",
+    font=dict(color="#374151"),
+    title_font_size=18
 )
-
 # =====================================================
-
-# DISPLAY CHARTS SIDE BY SIDE
-
+# SHOW CHARTS SIDE BY SIDE
 # =====================================================
 
 col1, col2 = st.columns(2)
@@ -271,8 +266,6 @@ with col1:
 
 with col2:
     st.plotly_chart(fig2, use_container_width=True)
-# =====================================================
-
 
 # CHART 3 - STUDENT DISTRIBUTION
 
