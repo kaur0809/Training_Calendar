@@ -305,8 +305,8 @@ st.plotly_chart(fig3, use_container_width=True)
 # =====================================================
 
 from datetime import timedelta
-
 events = []
+schedule_rows = []
 
 for _, row in filtered_df.iterrows():
 
@@ -353,9 +353,12 @@ for _, row in filtered_df.iterrows():
             end_dt = start_dt + timedelta(hours=2)
 
             events.append({
-                "title": f"{row['Program']} | {row['Mapped Trainers']}",
-                "start": start_dt.isoformat(),
-                "end": end_dt.isoformat(),
+                schedule_rows.append({
+    "Date": current.date(),
+    "Time": class_time,
+    "Program": row["Program"],
+    "Trainer": row["Mapped Trainers"],
+    "Mode": row["Delivery mode"]
 
                 "backgroundColor": bg_color,
                 "borderColor": border_color,
@@ -371,42 +374,44 @@ st.markdown("""
 🔵 **Offline Classes**
 """)
 # =====================================================
-
-# TRAINING TIMELINE
-
+# TRAINING CALENDAR + SCHEDULE PANEL
 # =====================================================
 
-calendar_options = {
-    "initialView": "dayGridMonth",
-    "height": 850,
+calendar_col, schedule_col = st.columns([3, 1])
 
-    "headerToolbar": {
-        "left": "prev,next today",
-        "center": "title",
-        "right": "dayGridMonth,timeGridWeek,timeGridDay"
-    },
+with calendar_col:
 
-    "eventDisplay": "block"
-}
+    st.subheader("📅 Training Calendar")
 
-calendar_state = calendar(
-    events=events,
-    options=calendar_options,
-    key="timeline"
-)
+    calendar_options = {
+        "initialView": "dayGridMonth",
+        "height": 850,
+        "headerToolbar": {
+            "left": "prev,next today",
+            "center": "title",
+            "right": "dayGridMonth,timeGridWeek,timeGridDay"
+        },
+        "eventDisplay": "block"
+    }
 
-if calendar_state.get("eventClick"):
+    calendar_state = calendar(
+        events=events,
+        options=calendar_options,
+        key="timeline"
+    )
 
-    selected = calendar_state["eventClick"]["event"]
+with schedule_col:
 
-    st.success("📚 Class Details")
+    st.subheader("📋 Schedule")
 
-    st.write(selected)
+    schedule_filter = st.selectbox(
+        "View",
+        ["Today", "Tomorrow", "Yesterday"]
+    )
 
-if calendar_state.get("eventClick"):
-    st.success("Class Details")
-    st.write(calendar_state["eventClick"])
-# =====================================================
+    st.info(
+        "Schedule panel will appear here."
+    )
 
 # UNIVERSITY SUMMARY
 
