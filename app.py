@@ -305,74 +305,78 @@ st.plotly_chart(fig3, use_container_width=True)
 # =====================================================
 
 from datetime import timedelta
+
 events = []
 schedule_rows = []
 
+day_map = {
+    "MONDAY": 0,
+    "TUESDAY": 1,
+    "WEDNESDAY": 2,
+    "THURSDAY": 3,
+    "FRIDAY": 4,
+    "SATURDAY": 5,
+    "SUNDAY": 6
+}
+
 for _, row in filtered_df.iterrows():
 
-    start_date = pd.to_datetime(row["Start date"])
-    end_date = pd.to_datetime(row["Closing date"])
+    try:
 
-    class_day = str(row["CLASS DAYS"]).upper()
-    class_time = str(row["CLASS TIME"])
+        start_date = pd.to_datetime(row["Start date"])
+        end_date = pd.to_datetime(row["Closing date"])
 
-    # ONLINE = GREEN
-    if str(row["Delivery mode"]).upper() == "ONLINE":
+        class_day = str(row["CLASS DAYS"]).upper().strip()
+        class_time = str(row["CLASS TIME"]).strip()
 
-        bg_color = "#22C55E"
-        border_color = "#16A34A"
+        if class_day not in day_map:
+            continue
 
-    # OFFLINE = BLUE
-    else:
+        # ONLINE = GREEN
+        if str(row["Delivery mode"]).upper() == "ONLINE":
+            bg_color = "#22C55E"
+            border_color = "#16A34A"
 
-        bg_color = "#3B82F6"
-        border_color = "#2563EB"
+        # OFFLINE = BLUE
+        else:
+            bg_color = "#3B82F6"
+            border_color = "#2563EB"
 
-    day_map = {
-        "MONDAY": 0,
-        "TUESDAY": 1,
-        "WEDNESDAY": 2,
-        "THURSDAY": 3,
-        "FRIDAY": 4,
-        "SATURDAY": 5,
-        "SUNDAY": 6
-    }
+        target_day = day_map[class_day]
 
-    target_day = day_map.get(class_day)
+        current = start_date
 
-    current = start_date
+        while current <= end_date:
 
-while current <= end_date:
+            if current.weekday() == target_day:
 
-    if current.weekday() == target_day:
+                start_dt = pd.to_datetime(
+                    f"{current.date()} {class_time}"
+                )
 
-        start_dt = pd.to_datetime(
-            f"{current.date()} {class_time}"
-        )
+                end_dt = start_dt + timedelta(hours=2)
 
-        end_dt = start_dt + timedelta(hours=2)
+                events.append({
+                    "title": f"{row['Program']} | {row['Mapped Trainers']}",
+                    "start": start_dt.isoformat(),
+                    "end": end_dt.isoformat(),
+                    "backgroundColor": bg_color,
+                    "borderColor": border_color,
+                    "textColor": "white"
+                })
 
-        events.append({
-            "title": f"{row['Program']} | {row['Mapped Trainers']}",
-            "start": start_dt.isoformat(),
-            "end": end_dt.isoformat(),
-            "backgroundColor": bg_color,
-            "borderColor": border_color,
-            "textColor": "white"
-        })
+                schedule_rows.append({
+                    "Date": current.date(),
+                    "Time": class_time,
+                    "Program": row["Program"],
+                    "Trainer": row["Mapped Trainers"],
+                    "Mode": row["Delivery mode"]
+                })
 
-        schedule_rows.append({
-            "Date": current.date(),
-            "Time": class_time,
-            "Program": row["Program"],
-            "Trainer": row["Mapped Trainers"],
-            "Mode": row["Delivery mode"]
-        })
+            current += timedelta(days=1)
 
-    current += timedelta(days=1)
-
-
-       
+    except Exception:
+        continue
 
 #========= Online/offline marker
 
