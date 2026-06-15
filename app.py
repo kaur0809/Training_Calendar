@@ -304,28 +304,109 @@ st.plotly_chart(fig3, use_container_width=True)
 # CALENDAR EVENTS
 # =====================================================
 
+from datetime import timedelta
+
 events = []
-schedule_rows = []
 
-####====
-    calendar_state = calendar(
-        events=events,
-        options=calendar_options,
-        key="timeline"
-    )
+for _, row in filtered_df.iterrows():
 
-with schedule_col:
+    start_date = pd.to_datetime(row["Start date"])
+    end_date = pd.to_datetime(row["Closing date"])
 
-    st.subheader("📋 Schedule")
+    class_day = str(row["CLASS DAYS"]).upper()
+    class_time = str(row["CLASS TIME"])
 
-    schedule_filter = st.selectbox(
-        "View",
-        ["Today", "Tomorrow", "Yesterday"]
-    )
+    # ONLINE = GREEN
+    if str(row["Delivery mode"]).upper() == "ONLINE":
 
-    st.info(
-        "Schedule panel will appear here."
-    )
+        bg_color = "#22C55E"
+        border_color = "#16A34A"
+
+    # OFFLINE = BLUE
+    else:
+
+        bg_color = "#3B82F6"
+        border_color = "#2563EB"
+
+    day_map = {
+        "MONDAY": 0,
+        "TUESDAY": 1,
+        "WEDNESDAY": 2,
+        "THURSDAY": 3,
+        "FRIDAY": 4,
+        "SATURDAY": 5,
+        "SUNDAY": 6
+    }
+
+    target_day = day_map.get(class_day)
+
+    current = start_date
+
+    while current <= end_date:
+
+        if current.weekday() == target_day:
+
+            start_dt = pd.to_datetime(
+                f"{current.date()} {class_time}"
+            )
+
+            end_dt = start_dt + timedelta(hours=2)
+
+            events.append({
+                "title": f"{row['Program']} | {row['Mapped Trainers']}",
+                "start": start_dt.isoformat(),
+                "end": end_dt.isoformat(),
+
+                "backgroundColor": bg_color,
+                "borderColor": border_color,
+                "textColor": "white"
+            })
+
+        current += timedelta(days=1)
+
+#========= Online/offline marker
+
+st.markdown("""
+🟢 **Online Classes** &nbsp;&nbsp;&nbsp;
+🔵 **Offline Classes**
+""")
+# =====================================================
+
+# TRAINING TIMELINE
+
+# =====================================================
+
+calendar_options = {
+    "initialView": "dayGridMonth",
+    "height": 850,
+
+    "headerToolbar": {
+        "left": "prev,next today",
+        "center": "title",
+        "right": "dayGridMonth,timeGridWeek,timeGridDay"
+    },
+
+    "eventDisplay": "block"
+}
+
+calendar_state = calendar(
+    events=events,
+    options=calendar_options,
+    key="timeline"
+)
+
+if calendar_state.get("eventClick"):
+
+    selected = calendar_state["eventClick"]["event"]
+
+    st.success("📚 Class Details")
+
+    st.write(selected)
+
+if calendar_state.get("eventClick"):
+    st.success("Class Details")
+    st.write(calendar_state["eventClick"])
+# =====================================================
 
 # UNIVERSITY SUMMARY
 
