@@ -344,7 +344,7 @@ for _, row in filtered_df.iterrows():
 
     while current <= end_date:
 
-    if current.weekday() == target_day:
+        if current.weekday() == target_day:
 
         start_dt = pd.to_datetime(
             f"{current.date()} {class_time}"
