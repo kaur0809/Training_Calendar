@@ -371,13 +371,6 @@ while current <= end_date:
 
     current += timedelta(days=1)
 
-schedule_rows.append({
-    "Date": current.date(),
-    "Time": class_time,
-    "Program": row["Program"],
-    "Trainer": row["Mapped Trainers"],
-    "Mode": row["Delivery mode"]
-})
 
        
 
