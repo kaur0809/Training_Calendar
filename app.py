@@ -39,7 +39,7 @@ st.markdown("""
         display: flex; 
         align-items: center; 
     }
-    .icon-spacing { margin-right: 8px; color: #0EA5E9; font-size: 16px; }
+    .icon-spacing { margin-right: 8px; color: #7C3AED; font-size: 16px; }
     .custom-icon { width: 22px; height: 22px; margin-right: 8px; object-fit: contain; }
     .main-header-icon { width: 42px; height: 42px; object-fit: contain; }
     
@@ -48,7 +48,7 @@ st.markdown("""
         border-radius: 12px;
         background-color: #FFFFFF;
         border: 1px solid #E2E8F0;
-        border-left: 6px solid #0EA5E9;
+        border-left: 6px solid #7C3AED;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
         margin-bottom: 14px;
     }
@@ -180,14 +180,14 @@ if BRAND_ICON_B64:
     </div>
     """, unsafe_allow_html=True)
 else:
-    st.markdown('<div class="title-container"><div class="main-title"><i class="fa-solid fa-calendar-days" style="color:#0EA5E9; margin-right:12px;"></i>Academic Calendar</div></div>', unsafe_allow_html=True)
+    st.markdown('<div class="title-container"><div class="main-title"><i class="fa-solid fa-calendar-days" style="color:#7C3AED; margin-right:12px;"></i>Academic Calendar</div></div>', unsafe_allow_html=True)
 
 st.markdown('<div class="sub-title">Drop your course Excel sheets to dynamically generate task calendars, manage timelines, and audit hours metrics.</div>', unsafe_allow_html=True)
 
 # =============================================================================
 # MULTI-DIMENSIONAL FILTERS MATRIX
 # =============================================================================
-st.markdown('<div class="section-header"><i class="fa-solid fa-magnifying-glass" style="color:#0EA5E9;"></i>Filter Workspace</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-header"><i class="fa-solid fa-magnifying-glass" style="color:#7C3AED;"></i>Filter Workspace</div>', unsafe_allow_html=True)
 layout_col_1, layout_col_2, layout_col_3, layout_col_4 = st.columns(4)
 
 with layout_col_1:
@@ -238,7 +238,7 @@ metric_hours_remaining = view_filtered_df['Remaining Hours'].sum() if has_active
 # =============================================================================
 # DISTINCT INSTITUTION COLOR GENERATION METRIC REGISTRY
 # =============================================================================
-DISTINCT_HEX_PALETTE = ["#0EA5E9", "#10B981", "#8B5CF6", "#F59E0B", "#EC4899", "#3B82F6", "#14B8A6", "#F43F5E"]
+DISTINCT_HEX_PALETTE = ["7C3AED", "#10B981", "#8B5CF6", "#F59E0B", "#EC4899", "#3B82F6", "#14B8A6", "#F43F5E"]
 university_color_registry = {}
 
 if has_active_session_data:
@@ -363,7 +363,7 @@ if has_active_session_data and not daily_timeline_logs_df.empty:
         else:
             status_text, dot_color, label_color = "In Progress", "#F59E0B", "#78350F"
             
-        structural_accent_color = university_color_registry.get(current_row['University'], "#0EA5E9")
+        structural_accent_color = university_color_registry.get(current_row['University'], "#7C3AED")
             
         st.markdown(f"""
         <div class="todo-box" style="border-left: 6px solid {structural_accent_color};">
