@@ -302,6 +302,10 @@ st.plotly_chart(fig3, use_container_width=True)
 
 # =====================================================
 # CALENDAR EVENTS
+
+st.subheader("📅 Training Calendar")
+
+st.warning("Calendar temporarily disabled for debugging.")
 # =====================================================
 
 #========= Online/offline marker
