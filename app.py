@@ -344,22 +344,33 @@ for _, row in filtered_df.iterrows():
 
     while current <= end_date:
 
-        if current.weekday() == target_day:
+    if current.weekday() == target_day:
 
-            start_dt = pd.to_datetime(
-                f"{current.date()} {class_time}"
-            )
+        start_dt = pd.to_datetime(
+            f"{current.date()} {class_time}"
+        )
 
-            end_dt = start_dt + timedelta(hours=2)
+        end_dt = start_dt + timedelta(hours=2)
 
-            events.append({
-    "title": f"{row['Program']} | {row['Mapped Trainers']}",
-    "start": start_dt.isoformat(),
-    "end": end_dt.isoformat(),
-    "backgroundColor": bg_color,
-    "borderColor": border_color,
-    "textColor": "white"
-})
+        events.append({
+            "title": f"{row['Program']} | {row['Mapped Trainers']}",
+            "start": start_dt.isoformat(),
+            "end": end_dt.isoformat(),
+            "backgroundColor": bg_color,
+            "borderColor": border_color,
+            "textColor": "white"
+        })
+
+        schedule_rows.append({
+            "Date": current.date(),
+            "Time": class_time,
+            "Program": row["Program"],
+            "Trainer": row["Mapped Trainers"],
+            "Mode": row["Delivery mode"]
+        })
+
+    current += timedelta(days=1)
+           
 
 schedule_rows.append({
     "Date": current.date(),
