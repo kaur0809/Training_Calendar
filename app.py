@@ -342,9 +342,9 @@ for _, row in filtered_df.iterrows():
 
     current = start_date
 
-    while current <= end_date:
+while current <= end_date:
 
-        if current.weekday() == target_day:
+    if current.weekday() == target_day:
 
         start_dt = pd.to_datetime(
             f"{current.date()} {class_time}"
@@ -370,7 +370,6 @@ for _, row in filtered_df.iterrows():
         })
 
     current += timedelta(days=1)
-           
 
 schedule_rows.append({
     "Date": current.date(),
