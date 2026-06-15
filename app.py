@@ -238,24 +238,24 @@ xaxis_tickangle=-30
 # =====================================================
 
 trainer_df = (
-filtered_df.groupby("Mapped Trainers")["Delivery hrs"]
+  filtered_df.groupby("Mapped Trainers")["Delivery hrs"]
 .sum()
 .reset_index()
 )
 
 fig2 = px.bar(
-trainer_df,
-x="Mapped Trainers",
-y="Delivery hrs",
-title="Trainer Workload",
-color_discrete_sequence=["#4C1D95"]
+  trainer_df,
+  x="Mapped Trainers",
+  y="Delivery hrs",
+  title="Trainer Workload",
+  color_discrete_sequence=["#4C1D95"]
 )
 
 fig2.update_layout(
-paper_bgcolor="white",
-plot_bgcolor="white",
-font=dict(color="#374151"),
-title_font_size=18
+      paper_bgcolor="white",
+       plot_bgcolor="white",
+       font=dict(color="#374151"),
+        title_font_size=18
 )
 
 # =====================================================
@@ -273,202 +273,27 @@ with col2:
     st.plotly_chart(fig2, use_container_width=True)
 # =====================================================
 
+
 # CHART 3 - STUDENT DISTRIBUTION
 
-# =====================================================
-
 student_df = (
-filtered_df.groupby("University")["No of students"]
-.sum()
-.reset_index()
+    filtered_df.groupby("University")["No of students"]
+    .sum()
+    .reset_index()
 )
 
 fig3 = px.pie(
-student_df,
-names="University",
-values="No of students",
-title="Student Distribution"
+    student_df,
+    names="University",
+    values="No of students",
+    title="Student Distribution"
 )
 
 fig3.update_layout(
-paper_bgcolor="white",
-plot_bgcolor="white",
-font=dict(color="#374151"),
-title_font_size=18
+    paper_bgcolor="white",
+    plot_bgcolor="white",
+    font=dict(color="#374151"),
+    title_font_size=18
 )
 
 st.plotly_chart(fig3, use_container_width=True)
-
-
-# =====================================================
-# CALENDAR EVENTS
-
-st.subheader("📅 Training Calendar")
-
-st.warning("Calendar temporarily disabled for debugging.")
-# =====================================================
-
-#========= Online/offline marker
-
-st.markdown("""
-🟢 **Online Classes** &nbsp;&nbsp;&nbsp;
-🔵 **Offline Classes**
-""")
-# =====================================================
-
-# TRAINING TIMELINE
-
-# =====================================================
-
-calendar_options = {
-    "initialView": "dayGridMonth",
-    "height": 850,
-
-    "headerToolbar": {
-        "left": "prev,next today",
-        "center": "title",
-        "right": "dayGridMonth,timeGridWeek,timeGridDay"
-    },
-
-    "eventDisplay": "block"
-}
-
-calendar_state = calendar(
-    events=events,
-    options=calendar_options,
-    key="timeline"
-)
-
-if calendar_state.get("eventClick"):
-
-    selected = calendar_state["eventClick"]["event"]
-
-    st.success("📚 Class Details")
-
-    st.write(selected)
-
-if calendar_state.get("eventClick"):
-    st.success("Class Details")
-    st.write(calendar_state["eventClick"])
-# =====================================================
-
-# UNIVERSITY SUMMARY
-
-# =====================================================
-
-st.subheader("University Summary")
-
-summary_df = (
-filtered_df
-.groupby("University")
-.agg({
-"Program": "nunique",
-"No of students": "sum",
-"Delivery hrs": "sum"
-})
-.reset_index()
-)
-
-summary_df.columns = [
-"University",
-"Programs",
-"Students",
-"Training Hours"
-]
-
-st.dataframe(
-summary_df,
-use_container_width=True
-)
- #======== 
-# TRAINER ALLOCATION MATRIX
-
-st.subheader("👨‍🏫 Trainer Allocation Matrix")
-
-allocation_df = filtered_df[
-    [
-        "Mapped Trainers",
-        "University",
-        "Program",
-        "Batch details",
-        "Delivery hrs"
-    ]
-]
-
-st.dataframe(
-    allocation_df,
-    use_container_width=True,
-    height=400
-)
-
-#========== TRAINER UTILIZATION
-
-st.subheader("📊 Trainer Utilization")
-
-trainer_util = (
-    filtered_df
-    .groupby("Mapped Trainers")["Delivery hrs"]
-    .sum()
-    .reset_index()
-    .sort_values(
-        "Delivery hrs",
-        ascending=False
-    )
-)
-
-st.dataframe(
-    trainer_util,
-    use_container_width=True
-)
-
-
-#=========Workload
-
-
-MAX_HOURS = 80
-
-trainer_util["Status"] = trainer_util["Delivery hrs"].apply(
-    lambda x: "🔴 Overloaded"
-    if x > MAX_HOURS
-    else "🟢 Available"
-)
-
-st.subheader("⚠ Trainer Capacity Status")
-
-st.dataframe(
-    trainer_util,
-    use_container_width=True
-)
-
-# =====================================================
-
-# DOWNLOAD BUTTON
-
-# =====================================================
-
-csv = filtered_df.to_csv(index=False).encode("utf-8")
-
-st.download_button(
-  label="📥 Download Filtered Data",
-   data=csv,
-  file_name="training_data.csv",
-  mime="text/csv"
-)
-
-# =====================================================
-
-# DETAILED DATASET
-
-# =====================================================
-
-st.subheader("Detailed Training Dataset")
-
-st.dataframe(
-  filtered_df,
-   use_container_width=True,
-   height=600
-)
-
-st.caption(
-f"Showing {len(filtered_df)} records"
-)
