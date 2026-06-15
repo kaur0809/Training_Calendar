@@ -304,107 +304,10 @@ st.plotly_chart(fig3, use_container_width=True)
 # CALENDAR EVENTS
 # =====================================================
 
-from datetime import timedelta
-
 events = []
 schedule_rows = []
 
-day_map = {
-    "MONDAY": 0,
-    "TUESDAY": 1,
-    "WEDNESDAY": 2,
-    "THURSDAY": 3,
-    "FRIDAY": 4,
-    "SATURDAY": 5,
-    "SUNDAY": 6
-}
-
-for _, row in filtered_df.iterrows():
-
-    try:
-
-        start_date = pd.to_datetime(row["Start date"])
-        end_date = pd.to_datetime(row["Closing date"])
-
-        class_day = str(row["CLASS DAYS"]).upper().strip()
-        class_time = str(row["CLASS TIME"]).strip()
-
-        if class_day not in day_map:
-            continue
-
-        # ONLINE = GREEN
-        if str(row["Delivery mode"]).upper() == "ONLINE":
-            bg_color = "#22C55E"
-            border_color = "#16A34A"
-
-        # OFFLINE = BLUE
-        else:
-            bg_color = "#3B82F6"
-            border_color = "#2563EB"
-
-        target_day = day_map[class_day]
-
-        current = start_date
-
-        while current <= end_date:
-
-            if current.weekday() == target_day:
-
-                start_dt = pd.to_datetime(
-                    f"{current.date()} {class_time}"
-                )
-
-                end_dt = start_dt + timedelta(hours=2)
-
-                events.append({
-                    "title": f"{row['Program']} | {row['Mapped Trainers']}",
-                    "start": start_dt.isoformat(),
-                    "end": end_dt.isoformat(),
-                    "backgroundColor": bg_color,
-                    "borderColor": border_color,
-                    "textColor": "white"
-                })
-
-                schedule_rows.append({
-                    "Date": current.date(),
-                    "Time": class_time,
-                    "Program": row["Program"],
-                    "Trainer": row["Mapped Trainers"],
-                    "Mode": row["Delivery mode"]
-                })
-
-            current += timedelta(days=1)
-
-    except Exception:
-        continue
-
-#========= Online/offline marker
-
-st.markdown("""
-🟢 **Online Classes** &nbsp;&nbsp;&nbsp;
-🔵 **Offline Classes**
-""")
-# =====================================================
-# TRAINING CALENDAR + SCHEDULE PANEL
-# =====================================================
-
-calendar_col, schedule_col = st.columns([3, 1])
-
-with calendar_col:
-
-    st.subheader("📅 Training Calendar")
-
-    calendar_options = {
-        "initialView": "dayGridMonth",
-        "height": 850,
-        "headerToolbar": {
-            "left": "prev,next today",
-            "center": "title",
-            "right": "dayGridMonth,timeGridWeek,timeGridDay"
-        },
-        "eventDisplay": "block"
-    }
-
+####====
     calendar_state = calendar(
         events=events,
         options=calendar_options,
