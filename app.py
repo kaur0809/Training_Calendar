@@ -70,9 +70,9 @@ st.markdown("""
     .kpi-subtext { font-size: 12px; color: #475569; margin-top: 4px; line-height: 1.4; }
     
     .fc-theme-standard .fc-scrollgrid { border-color: #E2E8F0 !important; background-color: #FFFFFF; }
-    .fc-header-toolbar .fc-button-primary { background-color: #0EA5E9 !important; border-color: #0EA5E9 !important; font-weight: 500 !important; }
-    .fc-header-toolbar .fc-button-primary:hover { background-color: #0284C7 !important; border-color: #0284C7 !important; }
-    .fc .fc-daygrid-day.fc-day-today { background-color: #F0F9FF !important; }
+    .fc-header-toolbar .fc-button-primary { background-color: #7C3AED !important; border-color:#7C3AED !important; font-weight: 500 !important; }
+    .fc-header-toolbar .fc-button-primary:hover { background-color: #6D28D9 !important; border-color: #0284C7 !important; }
+    .fc .fc-daygrid-day.fc-day-today { background-color: #F3E8FF !important; }
     
     .legend-wrapper { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 12px; padding: 10px 0; }
     .legend-item { display: flex; align-items: center; font-size: 13px; font-weight: 600; color: #334155; }
@@ -151,7 +151,7 @@ def normalize_ingested_dataset(raw_dataframe):
 # =============================================================================
 # DATA INGESTION INTERFACE & RUNTIME HANDLING
 # =============================================================================
-st.sidebar.markdown('### <i class="fa-solid fa-folder-open" style="color:#0EA5E9; margin-right:8px;"></i>Data Management', unsafe_allow_html=True)
+st.sidebar.markdown('### <i class="fa-solid fa-folder-open" style="color:#7C3AED; margin-right:8px;"></i>Data Management', unsafe_allow_html=True)
 runtime_file_stream = st.sidebar.file_uploader("Upload Excel File (.xlsx)", type=["xlsx"])
 
 has_active_session_data = False
