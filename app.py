@@ -369,7 +369,7 @@ schedule_rows.append({
     "Mode": row["Delivery mode"]
 })
 
-        current += timedelta(days=1)
+       
 
 #========= Online/offline marker
 
