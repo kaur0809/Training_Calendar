@@ -8,7 +8,7 @@ import base64
 # =============================================================================
 # ENVIRONMENT & APPLICATION LAYOUT CONFIGURATION
 # =============================================================================
-st.set_page_config(page_title="Academic Calendar", layout="wide")
+st.set_page_config(page_title="Training Resource Management Dashboard", layout="wide")
 
 # Link critical system UI icon components
 st.markdown(
@@ -246,7 +246,7 @@ if has_active_session_data:
     for element_idx, inst_name in enumerate(distinct_institutions_list):
         university_color_registry[inst_name] = DISTINCT_HEX_PALETTE[element_idx % len(DISTINCT_HEX_PALETTE)]
 else:
-    university_color_registry["General"] = "#0EA5E9"
+    university_color_registry["General"] = "#7C3AED"
 
 # =============================================================================
 # CHRONOLOGICAL JOB QUEUE PIPELINE ENGINE (CLEAN STRINGS ONLY)
@@ -274,12 +274,12 @@ if has_active_session_data and not view_filtered_df.empty:
 st.sidebar.markdown("---")
 st.sidebar.markdown(f"""
 <div class="kpi-card">
-    <div class="kpi-title"><i class="fa-solid fa-hourglass-start" style="color:#0EA5E9;"></i> Next Work To Do</div>
+    <div class="kpi-title"><i class="fa-solid fa-hourglass-start" style="color:#7C3AED;"></i> Next Work To Do</div>
     <div class="kpi-value" style="font-size: 16px; line-height:1.2; margin-bottom:4px;">{next_task_name}</div>
     <div class="kpi-subtext">
-        <i class="fa-solid fa-calendar" style="color:#0EA5E9; margin-right:4px;"></i> <b>Date:</b> {next_task_date}<br/>
-        <i class="fa-solid fa-clock" style="color:#0EA5E9; margin-right:4px;"></i> <b>Remaining:</b> {next_task_hours}<br/>
-        <i class="fa-solid fa-user-tie" style="color:#0EA5E9; margin-right:4px;"></i> <b>Trainer:</b> {next_task_trainer}
+        <i class="fa-solid fa-calendar" style="color:##7C3AED; margin-right:4px;"></i> <b>Date:</b> {next_task_date}<br/>
+        <i class="fa-solid fa-clock" style="color:#7C3AED; margin-right:4px;"></i> <b>Remaining:</b> {next_task_hours}<br/>
+        <i class="fa-solid fa-user-tie" style="color:#7C3AED; margin-right:4px;"></i> <b>Trainer:</b> {next_task_trainer}
     </div>
 </div>
 
@@ -301,13 +301,13 @@ st.sidebar.markdown(f"""
 # SCHEDULE MATRIX INTERACTIVE ENGINE
 # =============================================================================
 st.write("---")
-st.markdown('<div class="section-header"><i class="fa-solid fa-calendar-days" style="color:#0EA5E9;"></i>Calendar</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-header"><i class="fa-solid fa-calendar-days" style="color:#7C3AED;"></i>Calendar</div>', unsafe_allow_html=True)
 
 compiled_calendar_events = []
 if has_active_session_data:
     for row_index, current_row in view_filtered_df.iterrows():
         display_title = f"[{current_row['University']}] {current_row['Task Name']} ({int(current_row['Completed Hours'])}h/{int(current_row['Total Allocated Hours'])}h)"
-        hex_profile_color = university_color_registry.get(current_row['University'], "#0EA5E9")
+        hex_profile_color = university_color_registry.get(current_row['University'], "#7C3AED")
         
         compiled_calendar_events.append({
             "id": str(current_row['Task ID']),
@@ -347,12 +347,12 @@ if has_active_session_data and university_color_registry:
             # Use a clean markdown color block instead of an HTML <span> tag
             st.markdown(f"<span style='color:{allocated_color}; font-size:18px;'>■</span> **{inst_id}**", unsafe_allow_html=True)
 else:
-    st.markdown("<span style='color:#0EA5E9; font-size:18px;'>■</span> *General / Waiting for upload...*", unsafe_allow_html=True)
+    st.markdown("<span style='color:#7C3AED; font-size:18px;'>■</span> *General / Waiting for upload...*", unsafe_allow_html=True)
 # =============================================================================
 # DAILY TIMELINE TRANSACTION REGISTRY DIARY LOGS
 # =============================================================================
 st.write("---")
-st.markdown(f'<div class="section-header"><i class="fa-solid fa-list-ol" style="color:#0EA5E9;"></i>Day Timeline Logs: {active_focus_date.strftime("%B %d, %Y")}</div>', unsafe_allow_html=True)
+st.markdown(f'<div class="section-header"><i class="fa-solid fa-list-ol" style="color:#7C3AED;"></i>Day Timeline Logs: {active_focus_date.strftime("%B %d, %Y")}</div>', unsafe_allow_html=True)
 
 if has_active_session_data and not daily_timeline_logs_df.empty:
     for row_index, current_row in daily_timeline_logs_df.iterrows():
@@ -379,7 +379,7 @@ else:
 # QUANTITATIVE GRAPHICAL GRAPH WORKSPACE VIEWS
 # =============================================================================
 st.write("---")
-st.markdown('<div class="section-header"><i class="fa-solid fa-chart-pie" style="color:#0EA5E9;"></i>Visual Data Analytics</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-header"><i class="fa-solid fa-chart-pie" style="color:#7C3AED;"></i>Visual Data Analytics</div>', unsafe_allow_html=True)
 analytics_col_left, analytics_col_right = st.columns(2)
 
 with analytics_col_left:
