@@ -201,13 +201,35 @@ total_trainers = filtered_df["Mapped Trainers"].nunique()
 total_students = filtered_df["No of students"].sum()
 total_hours = filtered_df["Delivery hrs"].sum()
 
-c1, c2, c3, c4, c5 = st.columns(5)
+k1, k2, k3, k4, k5 = st.columns(5)
 
-c1.metric("Universities", total_universities)
-c2.metric("Programs", total_programs)
-c3.metric("Trainers", total_trainers)
-c4.metric("Students", int(total_students))
-c5.metric("Training Hours", round(total_hours, 1))
+cards = [
+    ("🏫", total_universities, "Universities", "#7C3AED"),
+    ("📚", total_programs, "Programs", "#22C55E"),
+    ("👨‍🏫", total_trainers, "Trainers", "#F59E0B"),
+    ("🎓", int(total_students), "Students", "#3B82F6"),
+    ("⏱", round(total_hours,1), "Delivery Hrs", "#EF4444")
+]
+
+for col, card in zip([k1,k2,k3,k4,k5], cards):
+
+    icon, value, label, color = card
+
+    with col:
+
+        st.markdown(f"""
+        <div style="
+        background:white;
+        padding:20px;
+        border-radius:18px;
+        box-shadow:0 2px 12px rgba(0,0,0,0.05);
+        border-top:4px solid {color};
+        ">
+            <div style="font-size:24px;">{icon}</div>
+            <h1 style="margin:0;">{value}</h1>
+            <p style="color:gray;margin:0;">{label}</p>
+        </div>
+        """, unsafe_allow_html=True)
 
 # =====================================================
 
@@ -381,7 +403,7 @@ st.markdown("""
 # TRAINING TIMELINE
 # =====================================================
 
-calendar_col, schedule_col = st.columns([3,1])
+calendar_col, schedule_col = st.columns([2,3])
 
 with calendar_col:
 
@@ -406,11 +428,36 @@ with calendar_col:
 
 with schedule_col:
 
-    st.subheader("📅 Today's Classes")
+    st.subheader("📋 Event Details")
 
-    st.info(
-        "Upcoming classes will appear here."
-    )
+    if calendar_state.get("eventClick"):
+
+        selected = calendar_state["eventClick"]["event"]
+
+        st.markdown(f"""
+        <div style="
+        background:white;
+        padding:20px;
+        border-radius:18px;
+        box-shadow:0px 2px 10px rgba(0,0,0,0.05);
+        margin-bottom:15px;
+        ">
+            <h3>{selected.get('title','Class')}</h3>
+
+            <p><b>Start:</b><br>
+            {selected.get('start','')}</p>
+
+            <p><b>End:</b><br>
+            {selected.get('end','')}</p>
+
+        </div>
+        """, unsafe_allow_html=True)
+
+    else:
+
+        st.info(
+            "Click a class in the calendar to view details."
+        )
 # =====================================================
 
 # UNIVERSITY SUMMARY
