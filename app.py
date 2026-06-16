@@ -18,28 +18,26 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-
-.stApp{
-    background-color:#F8F9FC;
+.fc {
+    background: white;
+    border-radius: 18px;
+    padding: 15px;
+    box-shadow: 0px 4px 12px rgba(124,58,237,0.10);
 }
 
-[data-testid="stSidebar"]{
-    background-color:#4C1D95;
+.fc-toolbar-title{
+    color:#4C1D95 !important;
+    font-weight:700 !important;
 }
 
-[data-testid="stSidebar"] *{
-    color:white;
+.fc-event{
+    border-radius:8px !important;
+    border:none !important;
+    font-size:12px !important;
 }
 
-h1,h2,h3{
-    color:#374151;
-}
-
-[data-testid="stMetric"]{
-    background:white;
-    border-radius:12px;
-    padding:15px;
-    border-left:5px solid #7C3AED;
+.fc-daygrid-event{
+    padding:4px !important;
 }
 
 </style>
@@ -402,10 +400,6 @@ if calendar_state.get("eventClick"):
     st.success("📚 Class Details")
 
     st.write(selected)
-
-if calendar_state.get("eventClick"):
-    st.success("Class Details")
-    st.write(calendar_state["eventClick"])
 # =====================================================
 
 # UNIVERSITY SUMMARY
