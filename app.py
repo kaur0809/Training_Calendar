@@ -48,9 +48,17 @@ st.markdown("""
 # =====================================================
 
 st.markdown("""
-### 📚University Training Planning Dashboard
-Monitor trainer allocation, delivery hours, student coverage and program execution.
-""")
+<div style="
+background:#4C1D95;
+padding:15px 25px;
+border-radius:15px;
+margin-bottom:20px;
+color:white;
+">
+<h2 style="margin:0;">🎓 Training Delivery Calendar</h2>
+<p style="margin:0;">Operations Dashboard</p>
+</div>
+""", unsafe_allow_html=True)
 
 # =====================================================
 # FILE UPLOADER
