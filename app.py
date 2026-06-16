@@ -403,7 +403,7 @@ st.markdown("""
 # TRAINING TIMELINE
 # =====================================================
 
-calendar_col, schedule_col = st.columns([2,3])
+calendar_col, schedule_col = st.columns([4,1])
 
 with calendar_col:
 
