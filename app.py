@@ -232,7 +232,14 @@ for col, card in zip([k1,k2,k3,k4,k5], cards):
         """, unsafe_allow_html=True)
 
 # =====================================================
-
+schedule_rows.append({
+    "Date": current.date(),
+    "Time": class_time,
+    "Program": row["Program"],
+    "Trainer": row["Mapped Trainers"],
+    "University": row["University"],
+    "Mode": row["Delivery mode"]
+})
 
 
 # =====================================================
