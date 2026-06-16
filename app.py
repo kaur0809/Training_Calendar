@@ -369,37 +369,40 @@ st.markdown("""
 🔵 **Offline Classes**
 """)
 # =====================================================
-
+# =====================================================
 # TRAINING TIMELINE
-
 # =====================================================
 
-calendar_options = {
-    "initialView": "dayGridMonth",
-    "height": 850,
+calendar_col, schedule_col = st.columns([3,1])
 
-    "headerToolbar": {
-        "left": "prev,next today",
-        "center": "title",
-        "right": "dayGridMonth,timeGridWeek,timeGridDay"
-    },
+with calendar_col:
 
-    "eventDisplay": "block"
-}
+    calendar_options = {
+        "initialView": "dayGridMonth",
+        "height": 850,
 
-calendar_state = calendar(
-    events=events,
-    options=calendar_options,
-    key="timeline"
-)
+        "headerToolbar": {
+            "left": "prev,next today",
+            "center": "title",
+            "right": "dayGridMonth,timeGridWeek,timeGridDay"
+        },
 
-if calendar_state.get("eventClick"):
+        "eventDisplay": "block"
+    }
 
-    selected = calendar_state["eventClick"]["event"]
+    calendar_state = calendar(
+        events=events,
+        options=calendar_options,
+        key="timeline"
+    )
 
-    st.success("📚 Class Details")
+with schedule_col:
 
-    st.write(selected)
+    st.subheader("📅 Today's Classes")
+
+    st.info(
+        "Upcoming classes will appear here."
+    )
 # =====================================================
 
 # UNIVERSITY SUMMARY
